@@ -1,0 +1,71 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - kinoprojekt</title>
+    <script type="importmap"></script>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/kinoprojekt.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <header>
+      <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark border-bottom mb-3" style="background: #0a1120; border-color: #3b82f6 !important;">
+    <div class="container-fluid">
+        <a class="navbar-brand" asp-controller="Home" asp-action="Index" style="font-weight: bold; color: #3b82f6; text-transform: uppercase;">KINO PIXEL</a>
+        
+        <div class="navbar-collapse collapse d-sm-inline-flex justify-content-end">
+            <ul class="navbar-nav">
+    <li class="nav-item"><a class="nav-link" href="#" style="color: #94a3b8; font-weight: bold; font-size: 14px; margin-left: 20px;">REPERTUAR</a></li>
+    <li class="nav-item"><a class="nav-link" href="#" style="color: #94a3b8; font-weight: bold; font-size: 14px; margin-left: 20px;">GATUNKI</a></li>
+    <li class="nav-item"><a class="nav-link" href="/Home/Wkrotce" style="color: #94a3b8; font-weight: bold; font-size: 14px; margin-left: 20px;">WKRÓTCE</a></li>
+    
+    <li class="nav-item" id="btnLogowanie">
+        <a class="nav-link" href="/Home/Zaloguj" style="color: #94a3b8; font-weight: bold; font-size: 14px; margin-left: 20px;">LOGOWANIE</a>
+    </li>
+    <li class="nav-item" id="btnKonto" style="display: none;">
+        <a class="nav-link" href="/Home/MojeKonto" style="color: #3b82f6; font-weight: bold; font-size: 14px; margin-left: 20px;">MOJE KONTO</a>
+    </li>
+</ul>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+       
+        if (localStorage.getItem('zalogowanyPixel')) {
+            
+    
+            let logBtn = document.getElementById('btnLogowanie');
+            let accBtn = document.getElementById('btnKonto');
+            if (logBtn) logBtn.style.display = 'none';
+            if (accBtn) accBtn.style.display = 'block';
+
+            let logBtnHome = document.getElementById('btnLogowanieHome');
+            let accBtnHome = document.getElementById('btnKontoHome');
+            if (logBtnHome) logBtnHome.style.display = 'none';
+            if (accBtnHome) accBtnHome.style.display = 'inline'; // inline, żeby pasowało do reszty linków
+        }
+    });
+</script>
+        </div>
+    </div>
+</nav>
+</nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+   <footer class="border-top footer text-muted" style="background: #0a1120; border-color: #3b82f6 !important;">
+    <div class="container" style="color: #94a3b8; padding: 10px 0;">
+        &copy; 2026 - KINO PIXEL
+    </div>
+</footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,41 @@
+<div style="max-width: 900px; margin: 40px auto; color: white; font-family: sans-serif;">
+    <h1 style="color: #3b82f6; text-transform: uppercase; border-bottom: 2px solid #3b82f6; padding-bottom: 10px; margin-bottom: 30px;">Wkrótce w kinie - Nadchodzące premiery</h1>
+
+    @{
+        var filmy = new[] { 
+            new { T = "The Batman 2", D = "Mroczny rycerz powraca do Gotham, by stawić czoła nowym seryjnym mordercom.", Foto = "batmanII.jpg" },
+            new { T = "Frozen III", D = "Anna i Elsa wyruszają w daleką podróż, by odkryć źródło starożytnej magii.", Foto = "frozenIII.jpg" },
+            new { T = "Diuna: Messiah", D = "Paul Atryda musi zmierzyć się z konsekwencjami swojej boskiej władzy.", Foto = "diunamessiah.jpg" },
+            new { T = "Diabeł ubiera się u Prady 2", D = "Miranda Priestly powraca, by udowodnić, że świat mody nadal należy do niej.", Foto = "eldiablovistealamoda2.jpg" },
+            new { T = "Mandalorian i Grogu", D = "Kinowa przygoda łowcy nagród i jego małego podopiecznego w odległej galaktyce.", Foto = "starwars.jpg" },
+            new { T = "jumanji 5", D = "Niebezpieczna gra ponownie wciąga graczy do dżungli, ale na nowych zasadach.", Foto = "jumaji5.jpg" },
+            new { T = "The Lord of the Rings: The Hunt for Gollum", D = "Nowa historia skupiająca się na poszukiwaniach Golluma przez Gandalfa i Aragorna.", Foto = "lotr.jpg" }
+        };
+
+        foreach (var f in filmy) {
+            <div style="display: flex; gap: 25px; margin-top: 25px; background: #16203a; padding: 25px; border-radius: 12px; border: 1px solid #3b82f6; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
+                
+                <img src="/images/@f.Foto" alt="@f.T" style="width: 130px; height: 190px; border-radius: 8px; object-fit: cover; border: 1px solid #3b82f6;">
+                
+                <div style="flex: 1;">
+                    <h2 style="margin: 0; color: #3b82f6; text-transform: uppercase; font-size: 20px;">@f.T</h2>
+                    <p style="color: #94a3b8; margin: 15px 0; font-size: 14px; line-height: 1.6;">@f.D</p>
+                    <p style="font-size: 12px; font-weight: bold; color: white; margin-bottom: 20px;">PREMIERA: WKRÓTCE</p>
+                    
+                    <button onclick="przypomnij('@f.T')" style="background: white; color: black; border: none; padding: 12px 25px; font-weight: bold; cursor: pointer; border-radius: 6px; font-size: 12px; text-transform: uppercase;">
+                        🔔 PRZYPOMNIJ MI
+                    </button>
+                </div>
+            </div>
+        }
+    }
+</div>
+
+<script>
+function przypomnij(film) {
+    const email = prompt("Wpisz swój e-mail, aby otrzymać powiadomienie o premierze filmu: " + film);
+    if (email && email.includes('@@')) {
+        alert("Dziękujemy! Wyślemy wiadomość na adres " + email + ", gdy " + film + " wejdzie do kin.");
+    }
+}
+</script>

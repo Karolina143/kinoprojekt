@@ -1,0 +1,77 @@
+<div style="max-width: 500px; margin: 40px auto; background: #16203a; padding: 40px; border: 2px solid #3b82f6; border-radius: 15px; color: white;">
+    <h2 style="color: white; margin-top: 0; text-transform: uppercase; font-size: 22px;">DOŁĄCZ DO KINO PIXEL</h2>
+    
+    <p id="errorBox" style="display:none; background: #e91e63; color: white; padding: 12px; border-radius: 5px; margin-bottom: 20px; font-size: 13px; font-weight: bold;"></p>
+
+    <input type="text" placeholder="Imię" id="regName" style="width: 100%; padding: 12px; margin-bottom: 15px; background: #0a1120; border: 1px solid #3b82f6; color: white;">
+    <input type="text" placeholder="Nazwisko" id="regSurname" style="width: 100%; padding: 12px; margin-bottom: 15px; background: #0a1120; border: 1px solid #3b82f6; color: white;">
+    
+    <select id="regCity" style="width: 100%; padding: 12px; margin-bottom: 15px; background: #0a1120; border: 1px solid #3b82f6; border-radius: 5px; color: #94a3b8;">
+        <option disabled selected>Wybierz swoje Kino Pixel</option>
+        @if (ViewBag.Miasta != null) {
+            foreach (var miasto in ViewBag.Miasta) { <option>@miasto</option> }
+        }
+    </select>
+
+    <input type="email" placeholder="E-mail" id="regEmail" style="width: 100%; padding: 12px; margin-bottom: 15px; background: #0a1120; border: 1px solid #3b82f6; color: white;">
+    <input type="password" placeholder="Hasło" id="regPass" style="width: 100%; padding: 12px; background: #0a1120; border: 1px solid #3b82f6; color: white;">
+    <p style="font-size: 10px; color: #94a3b8; margin: 5px 0 20px;">Minimum 8 znaków, cyfra, mała i wielka litera</p>
+
+    <p style="font-size: 14px; color: #e91e63; font-weight: bold; margin-bottom: 10px;">Data urodzenia</p>
+    <div style="display: flex; gap: 10px; margin-bottom: 30px;">
+        <input type="number" id="dd" placeholder="DD" style="width: 70px; padding: 10px; background: #0a1120; border: 1px solid #3b82f6; color: white; text-align: center;">
+        <input type="number" id="mm" placeholder="MM" style="width: 70px; padding: 10px; background: #0a1120; border: 1px solid #3b82f6; color: white; text-align: center;">
+        <input type="number" id="yy" placeholder="RRRR" style="width: 100px; padding: 10px; background: #0a1120; border: 1px solid #3b82f6; color: white; text-align: center;">
+    </div>
+
+    <button onclick="performRegistration()" style="width: 100%; padding: 15px; background: #3b82f6; color: white; border: none; font-weight: bold; cursor: pointer; border-radius: 8px;">DOŁĄCZ</button>
+</div>
+
+<script>
+function performRegistration() {
+    
+    const err = document.getElementById('errorBox');
+    err.style.display = "none"; 
+
+    const pass = document.getElementById('regPass').value;
+    const d = parseInt(document.getElementById('dd').value);
+    const m = parseInt(document.getElementById('mm').value);
+    const y = parseInt(document.getElementById('yy').value);
+    
+   
+    const passPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+    if (!passPattern.test(pass)) {
+        err.innerText = "BŁĄD: Hasło musi mieć min. 8 znaków, cyfrę oraz małą i wielką literę!";
+        err.style.display = "block"; return;
+    }
+
+ 
+    const today = new Date();
+    const inputDate = new Date(y, m - 1, d);
+    
+    if (!d || !m || !y || d < 1 || d > 31 || m < 1 || m > 12 || y < 1900 || inputDate > today) {
+        err.innerText = "BŁĄD: Data jest nieprawidłowa (np. ujemna lub z przyszłości)!";
+        err.style.display = "block"; return;
+    }
+
+   
+    if (inputDate.getDate() !== d) {
+        err.innerText = "BŁĄD: Ten miesiąc nie ma tylu dni!";
+        err.style.display = "block"; return;
+    }
+
+    const uzytkownik = {
+        imie: document.getElementById('regName').value,
+        nazwisko: document.getElementById('regSurname').value,
+        kino: document.getElementById('regCity').value,
+        email: document.getElementById('regEmail').value
+    };
+    
+  
+    localStorage.setItem('zalogowanyPixel', JSON.stringify(uzytkownik));
+
+    
+    alert("Rejestracja pomyślna! Witamy w Kino Pixel.");
+    window.location.href = '/';
+}
+</script>

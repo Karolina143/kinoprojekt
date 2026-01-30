@@ -1,0 +1,91 @@
+@model kinoprojekt.Models.Film
+@{ Layout = null; }
+
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Wybierz termin - @Model.Tytul</title>
+    <style>
+        body { background: #0a1120; color: white; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 20px; }
+        .container { max-width: 800px; margin: 40px auto; background: #16203a; padding: 40px; border-radius: 20px; border: 1px solid #3b82f6; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+   
+        .search-box { position: relative; margin: 20px 0; }
+        #citySearch { width: 100%; padding: 15px; border-radius: 10px; border: 2px solid #3b82f6; background: #1e293b; color: white; font-size: 16px; outline: none; }
+        .results-list { position: absolute; top: 100%; left: 0; right: 0; background: #1e293b; border: 1px solid #3b82f6; border-radius: 0 0 10px 10px; display: none; z-index: 100; max-height: 200px; overflow-y: auto; }
+        .city-opt { padding: 12px; cursor: pointer; border-bottom: 1px solid #2d3748; }
+        .city-opt:hover { background: #3b82f6; }
+
+        .dates { display: none; gap: 10px; margin: 30px 0; overflow-x: auto; padding-bottom: 10px; }
+        .d-btn { background: #1e293b; border: 1px solid #3b82f6; color: #94a3b8; padding: 15px; border-radius: 12px; cursor: pointer; text-align: center; min-width: 80px; transition: 0.3s; }
+        .d-btn.active { background: #3b82f6; color: white; }
+        .d-btn:hover { border-color: white; }
+
+        .hours { display: none; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 15px; margin-top: 20px; }
+        .h-btn { background: #10b981; color: white; padding: 12px; text-align: center; border-radius: 8px; text-decoration: none; font-weight: bold; transition: 0.3s; }
+        .h-btn:hover { background: #059669; transform: scale(1.05); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/Home/Szczegoly/@Model.Id" style="color: #3b82f6; text-decoration: none; font-weight: bold; font-size: 14px;">← POWRÓT DO FILMU</a>
+        <h2 style="margin-top: 20px;">Wybierz kino i czas dla: @Model.Tytul</h2>
+
+        <div class="search-box">
+            <p style="color: #94a3b8;">1. W jakim mieście chcesz obejrzeć film?</p>
+            <input type="text" id="citySearch" placeholder="Zacznij wpisywać nazwę miasta..." onkeyup="liveCity()">
+            <div id="cityList" class="results-list">
+                @foreach (var m in (List<string>)ViewBag.Miasta) {
+                    <div class="city-opt" onclick="pickCity('@m')">@m</div>
+                }
+            </div>
+        </div>
+
+        <div id="step2" style="display:none;">
+            <p style="color: #94a3b8;">2. Wybierz datę seansu:</p>
+            <div class="dates" style="display: flex;">
+                @for (int i = 0; i < 7; i++) {
+                    var d = DateTime.Now.AddDays(i);
+                    <div class="d-btn @(i==0?"active":"")" onclick="pickDate(this)">
+                        <small style="text-transform: uppercase;">@d.ToString("ddd")</small><br>
+                        <strong>@d.ToString("dd.MM")</strong>
+                    </div>
+                }
+            </div>
+
+            <p style="color: #94a3b8;">3. Wybierz godzinę, aby przejść do wyboru miejsc:</p>
+            <div id="step3" class="hours" style="display: grid;">
+                @foreach (var h in Model.Godziny.Split(',')) {
+                    <a href="/Home/SalaKinowa/@Model.Id" class="h-btn">@h.Trim()</a>
+                }
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function liveCity() {
+            let val = document.getElementById('citySearch').value.toLowerCase();
+            let list = document.getElementById('cityList');
+            let opts = document.getElementsByClassName('city-opt');
+        
+            list.style.display = val.length > 0 ? "block" : "none";
+            
+         
+            for(let o of opts) {
+                o.style.display = o.innerText.toLowerCase().includes(val) ? "block" : "none";
+            }
+        }
+
+        function pickCity(name) {
+            document.getElementById('citySearch').value = name;
+            document.getElementById('cityList').style.display = "none";
+            document.getElementById('step2').style.display = "block";
+        }
+
+        function pickDate(btn) {
+            document.querySelectorAll('.d-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        }
+    </script>
+</body>
+</html>

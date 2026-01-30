@@ -1,0 +1,146 @@
+@model kinoprojekt.Models.Film
+@{ Layout = null; }
+
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Wybór miejsc - @Model.Tytul</title>
+    <style>
+        body { background: #0a1120; color: white; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; }
+        
+        /* PASEK INFORMACYJNY NA GÓRZE */
+        .info-bar { background: white; color: black; padding: 15px 40px; display: flex; align-items: center; gap: 40px; border-bottom: 2px solid #ddd; margin-bottom: 20px; }
+        .info-bar img { height: 70px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+        .info-group { display: flex; flex-direction: column; }
+        .info-label { font-size: 11px; text-transform: uppercase; color: #777; font-weight: bold; }
+        .info-value { font-size: 15px; font-weight: bold; }
+
+        .hall-container { max-width: 1150px; margin: 20px auto; background: #16203a; padding: 40px; border-radius: 20px; display: flex; gap: 30px; border: 1px solid #3b82f6; }
+        .screen-area { flex: 2; text-align: center; }
+        .screen { background: #3b82f6; height: 8px; width: 80%; margin: 0 auto 50px; border-radius: 5px; box-shadow: 0 10px 20px rgba(59, 130, 246, 0.4); }
+        
+        .row { display: flex; justify-content: center; gap: 8px; margin-bottom: 10px; align-items: center; }
+        .row-label { width: 70px; text-align: right; color: #94a3b8; font-size: 11px; font-weight: bold; }
+        
+        .seat { width: 30px; height: 30px; background: #1e293b; border-radius: 5px; cursor: pointer; border: 2px solid; transition: 0.2s; box-sizing: border-box; }
+        .seat.selected { background: #e91e63 !important; border-color: #ad1457 !important; }
+
+        .std .seat { border-color: #3b82f6; }
+        .vip .seat { border-color: #f59e0b; }
+        .inv { background: #475569; border-color: #fff !important; display: flex; align-items: center; justify-content: center; font-size: 14px; cursor: default; }
+
+        .side-panel { flex: 1; background: #1e294b; padding: 25px; border-radius: 15px; border: 1px solid #3b82f6; }
+        .legend { margin-bottom: 25px; }
+        .leg-item { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; font-size: 13px; }
+        
+        .summary { border-top: 1px solid #3b82f6; padding-top: 20px; }
+        .total-price { font-size: 32px; font-weight: bold; color: white; margin: 10px 0; }
+        
+        .btn-pay { width: 100%; padding: 15px; background: #e91e63; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .btn-pay:hover { background: #c2185b; }
+    </style>
+</head>
+<body>
+    <div class="info-bar">
+        <img src="@Model.Obrazek" alt="Poster">
+        <div class="info-group">
+            <span class="info-label">Kupujesz bilety na:</span>
+            <span class="info-value">@Model.Tytul</span>
+        </div>
+        <div class="info-group">
+            <span class="info-label">Dzień i godzina seansu:</span>
+            <span class="info-value">@ViewBag.Data, godzina @ViewBag.Godzina</span>
+        </div>
+        <div class="info-group">
+            <span class="info-label">Miejscowość:</span>
+            <span class="info-value">@ViewBag.Miasto</span>
+        </div>
+        <div style="margin-left: auto;">
+            <a href="/Home/WybierzTermin/@Model.Id" style="color:#3b82f6; text-decoration:none; font-weight:bold; font-size:12px; border:1px solid #3b82f6; padding:8px; border-radius:5px;">ZMIEŃ DATĘ I GODZINĘ</a>
+        </div>
+    </div>
+
+    <div class="hall-container">
+        <div class="screen-area">
+            <div class="screen">EKRAN</div>
+
+            <div class="row std">
+                <span class="row-label">RZĄD 1</span>
+                <div class="seat inv">♿</div>
+                @for(int s=2; s<=11; s++){
+                    <div class="seat" data-price="20" data-row="1" data-seat="@s" onclick="toggleSeat(this)"></div>
+                }
+                <div class="seat inv">♿</div>
+            </div>
+
+            @for(int r=2; r<=6; r++) {
+                <div class="row std">
+                    <span class="row-label">RZĄD @r</span> 
+                    @for(int s=1; s<=12; s++){
+                        <div class="seat" data-price="20" data-row="@r" data-seat="@s" onclick="toggleSeat(this)"></div>
+                    }
+                </div>
+            }
+
+            @for(int r=7; r<=8; r++) {
+                <div class="row vip">
+                    <span class="row-label">VIP @r</span> 
+                    @for(int s=1; s<=12; s++){
+                        <div class="seat" data-price="25" data-row="@r" data-seat="@s" onclick="toggleSeat(this)"></div>
+                    }
+                </div>
+            }
+        </div>
+
+        <div class="side-panel">
+            <div class="legend">
+                <h3 style="color:#3b82f6; margin-top:0; font-size:16px;">LEGENDA</h3>
+                <div class="leg-item"><div class="seat" style="border-color:#3b82f6"></div> Standard - 20,00 zł</div>
+                <div class="leg-item"><div class="seat" style="border-color:#f59e0b"></div> VIP - 25,00 zł</div>
+                <div class="leg-item"><div class="seat inv">♿</div> Miejsce dla inwalidy</div>
+                <div class="leg-item" style="align-items: flex-start; flex-direction: column; gap: 5px;">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <div class="seat selected"></div> Twoje wybrane miejsca:
+                    </div>
+                    <span id="selectedSeatsList" style="font-weight:bold; color: #e91e63; margin-left: 40px;">Brak</span>
+                </div>
+            </div>
+            
+            <div class="summary">
+                <p style="margin:0; color:#94a3b8; font-size: 11px; text-transform:uppercase;">Suma do zapłaty:</p>
+                <div class="total-price"><span id="priceDisplay">0,00</span> zł</div>
+                
+                <button class="btn-pay" onclick="alert('Twoje miejsca zostały zarezerwowane!')">POTWIERDZAM I PŁACĘ</button>
+                <p style="font-size:9px; color:#94a3b8; margin-top:15px; text-align:center;">🔒 TRANSAKCJA ZABEZPIECZONA CERTYFIKATEM PCI</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let total = 0;
+        let selectedSeats = [];
+
+        function toggleSeat(seat) {
+            let price = parseInt(seat.getAttribute('data-price'));
+            let row = seat.getAttribute('data-row');
+            let num = seat.getAttribute('data-seat');
+            let seatId = "Rz. " + row + " m. " + num;
+
+            if (seat.classList.contains('selected')) {
+                seat.classList.remove('selected');
+                total -= price;
+                selectedSeats = selectedSeats.filter(s => s !== seatId);
+            } else {
+                seat.classList.add('selected');
+                total += price;
+                selectedSeats.push(seatId);
+            }
+
+           
+            document.getElementById('priceDisplay').innerText = total.toFixed(2).replace('.', ',');
+            document.getElementById('selectedSeatsList').innerText = selectedSeats.length > 0 ? selectedSeats.join(', ') : "Brak";
+        }
+    </script>
+</body>
+</html>

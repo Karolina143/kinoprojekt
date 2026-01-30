@@ -1,0 +1,34 @@
+<div style="max-width: 500px; margin: 80px auto; background: #16203a; padding: 40px; border: 2px solid #3b82f6; border-radius: 15px; color: white; box-shadow: 0 0 25px rgba(59, 130, 246, 0.4);">
+    <h2 style="color: #3b82f6; text-transform: uppercase; margin-top: 0;">Twoje dane - Kino Pixel</h2>
+    <hr style="border-color: #3b82f6; margin-bottom: 25px;">
+    
+    <div style="font-size: 16px; line-height: 2.5;">
+        <p><strong>IMIĘ:</strong> <span id="pImie" style="color: #94a3b8;">---</span></p>
+        <p><strong>NAZWISKO:</strong> <span id="pNazwisko" style="color: #94a3b8;">---</span></p>
+        <p><strong>ULUBIONE KINO:</strong> <span id="pKino" style="color: #94a3b8;">---</span></p>
+        <p><strong>E-MAIL:</strong> <span id="pEmail" style="color: #94a3b8;">---</span></p>
+    </div>
+
+    <button onclick="logout()" style="width: 100%; padding: 15px; margin-top: 30px; background: #e91e63; color: white; border: none; font-weight: bold; cursor: pointer; border-radius: 8px;">WYLOGUJ SIĘ</button>
+</div>
+
+<script>
+ 
+    const dane = JSON.parse(localStorage.getItem('zalogowanyPixel'));
+    
+    if (dane) {
+        document.getElementById('pImie').innerText = dane.imie;
+        document.getElementById('pNazwisko').innerText = dane.nazwisko;
+        document.getElementById('pKino').innerText = dane.kino;
+        document.getElementById('pEmail').innerText = dane.email;
+    } else {
+        
+        window.location.href = '/Home/Zaloguj';
+    }
+
+    function logout() {
+      
+        localStorage.removeItem('zalogowanyPixel');
+        window.location.href = '/';
+    }
+</script>
