@@ -1,1 +1,19 @@
+System Rejestracji Kont: Możliwość tworzenia nowych profili użytkowników w bazie systemu.
 
+Autoryzacja Użytkowników: Bezpieczny system logowania pozwalający na dostęp do funkcji rezerwacji.
+
+Dynamiczny Repertuar: Automatyczne wyświetlanie aktualnej listy filmów pobieranej z bazy danych.
+
+Galeria Plakatów: System zarządzania grafikami i plakatami filmowymi wyświetlanymi w interfejsie.
+
+Szczegółowe Opisy Filmów: Możliwość sprawdzenia fabuły i informacji o każdym tytule przed zakupem.
+
+Wybór Terminów Seansów: Filtrowanie i wybór konkretnej daty oraz godziny wyświetlania filmu.
+
+Interaktywna Sala Kinowa: Graficzna prezentacja układu foteli umożliwiająca intuicyjny wybór miejsca.
+
+Status Zajętości Miejsc: System w czasie rzeczywistym blokujący fotele już zarezerwowane przez innych.
+
+Podsumowanie Rezerwacji: Wyświetlenie wszystkich szczegółów wybranego biletu przed ostatecznym zatwierdzeniem.
+
+Responsywny Interfejs: Dostosowanie wyglądu strony do różnych rozdzielczości ekranu dzięki zastosowaniu stylów CSS.
